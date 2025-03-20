@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seznam podniků</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Vlastní stylování -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: url("{% static 'images/pexels-jorge-zapata-610306-1398688.jpg' %}") no-repeat center center fixed;
+            background-size: cover; /* Obrázek bude pokrývat celé pozadí */
+            color: white; /* Barva textu pro čitelnost na světlém pozadí */
+            padding-top: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: white; /* Bílý text pro lepší kontrast s pozadím */
+            margin-bottom: 1.5rem;
+        }
+
+        .business-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 0;
+            list-style: none;
+        }
+
+        .business-item {
+            background-color: rgba(255, 255, 255, 0.8); /* Poloprůhledné bílé pozadí */
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            border: 1px solid rgba(224, 224, 224, 0.8);
+        }
+
+        .business-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .business-item a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #007bff;
+        }
+
+        .business-item a:hover {
+            color: #0056b3;
+        }
+
+        .business-category {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        .text-center.text-secondary {
+            color: white !important; /* Bílý text pro žádné podniky */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Seznam podniků</h1>
+
+        {% if businesses %}
+        <ul class="business-list">
+            {% for business in businesses %}
+            <li class="business-item">
+                <a href="{% url 'business_detail' business.id %}">{{ business.name }}</a>
+                <div class="business-category">{{ business.category.name }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-center text-secondary fs-5">Žádné podniky nebyly nalezeny.</p>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

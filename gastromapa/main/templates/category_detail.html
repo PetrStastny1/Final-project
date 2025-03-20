@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} - Kategorie</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: url(
+                {% if category.name == "Restaurace" %}
+                "{% static 'images/pexels-alex-gonzo-1518705084-27101539.jpg' %}"
+                {% elif category.name == "Cukrárna" %}
+                "{% static 'images/pexels-valeriya-827516.jpg' %}"
+                {% elif category.name == "Bistro" %}
+                "{% static 'images/pexels-janetrangdoan-793785.jpg' %}"
+                {% elif category.name == "Bar" %}
+                "{% static 'images/pexels-rachel-claire-5531479.jpg' %}"
+                {% else %}
+                "{% static 'images/pexels-chevanon-302894.jpg' %}"
+                {% endif %}
+            ) no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .content {
+            text-align: center;
+            margin: 5rem 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: none;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #007bff;
+        }
+
+        .category-card a:hover {
+            color: #0056b3;
+        }
+
+        .category-card p {
+            margin-top: 0.5rem;
+            color: #343a40;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            font-size: 1rem;
+            text-decoration: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid white;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ddd;
+        }
+
+        .back-link-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Podniky v kategorii: {{ category.name }}</h1>
+        <div class="content">
+            {% if businesses %}
+            <div class="row justify-content-center">
+                {% for business in businesses %}
+                <div class="col-md-4 mb-4">
+                    <div class="category-card">
+                        <a href="{% url 'business_detail' business.id %}">{{ business.name }}</a>
+                        <p>{{ business.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>Žádné podniky v této kategorii.</p>
+            {% endif %}
+            <div class="back-link-container">
+                <a href="{% url 'category_list' %}" class="back-link">Zpět na seznam kategorií</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

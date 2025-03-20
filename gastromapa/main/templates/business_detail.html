@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail podniku - {{ business.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url("{% static 'images/pexels-kampus-8629096.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding-top: 2rem;
+        }
+
+        h1, h2 {
+            color: #343a40;
+            font-weight: 500;
+        }
+
+        .business-details, .reviews-section, .media-gallery {
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .business-details p, .reviews-section p, .media-gallery p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .review-item {
+            border-bottom: 1px solid #eaeaea;
+            padding: 1rem 0;
+        }
+
+        .media-item img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .text-secondary {
+            font-size: 1.1rem;
+            color: #6c757d !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="business-details">
+            <h1>{{ business.name }}</h1>
+            <p><strong>Adresa:</strong> {{ business.address }}</p>
+            <p><strong>Kategorie:</strong> {{ business.category.name }}</p>
+        </div>
+
+        <div class="reviews-section">
+            <h2>Recenze</h2>
+            {% if reviews %}
+            <ul class="list-unstyled">
+                {% for review in reviews %}
+                <li class="review-item">
+                    <p><strong>{{ review.user.username }}</strong>: {{ review.rating }}/10</p>
+                    <p>{{ review.comment }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-secondary">Žádné recenze nejsou k dispozici.</p>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'add_review' business.id %}" class="btn btn-primary mt-2">Přidat recenzi</a>
+            {% else %}
+            <p>Pro přidání recenze se prosím <a href="{% url 'login' %}">přihlaste</a>.</p>
+            {% endif %}
+        </div>
+
+        <div class="media-gallery">
+            <h2>Média</h2>
+            {% if media_items %}
+            <div class="row">
+                {% for media in media_items %}
+                <div class="col-md-4 mb-3 media-item">
+                    <img src="{{ media.file.url }}" alt="Media obrázek">
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-secondary">Žádná média nejsou k dispozici.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
