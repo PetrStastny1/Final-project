@@ -1,0 +1,33 @@
+# Python cache soubory
+*.py[cod]
+__pycache__/
+*.pyo
+*.pyd
+
+# Nastavení IDE (jako třeba PyCharm/VSCode)
+.idea/
+.vscode/
+
+# MacOS specifické soubory
+.DS_Store
+*.swp
+
+# Virtuální prostředí
+venv/
+.env
+
+# Migrační zálohy databáze
+*.sqlite3
+
+# Statické a mediální soubory generované během vývoje
+staticfiles/
+media/
+node_modules/
+
+# Logy a ladicí soubory
+*.log
+
+# Soubory s tajemstvím nebo konfigurací
+.env
+*.env
+.secret
