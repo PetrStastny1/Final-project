@@ -6,128 +6,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vyhledávání podniků</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Vlastní stylování -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background: url("{% static 'images/pexels-picjumbo-com-55570-196655.jpg' %}") no-repeat center center fixed;
-            background-size: cover; /* Obrázek pokryje celé pozadí */
-            color: white; /* Bílý text kvůli kontrastu */
-            height: 100vh; /* Výška stránky 100% okna */
+            background-size: cover;
+            color: white;
+            min-height: 100vh;
             margin: 0;
             display: flex;
-            justify-content: center; /* Horizontální zarovnání */
-            align-items: center; /* Vertikální zarovnání */
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
         }
 
         .search-module {
-            background: rgba(0, 0, 0, 0.6); /* Tmavé poloprůhledné pozadí */
+            background: rgba(0, 0, 0, 0.6);
             padding: 2rem;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-            width: 100%; /* Šířka modulu přes celé okno */
+            width: 100%;
         }
 
-        .search-content {
-            max-width: 700px; /* Maximální šířka formuláře uvnitř modulu */
-            margin: 0 auto; /* Vycentrování formuláře uvnitř modulu */
-        }
+        .search-content { max-width: 700px; margin: 0 auto; }
 
         h1 {
             text-align: center;
             font-size: 2.5rem;
-            color: white; /* Bílá barva nadpisu */
+            color: white;
             margin-bottom: 2rem;
             font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        form {
-            display: flex;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.3); /* Zvýšená průhlednost formuláře */
+        /* Vstup + Hledat + Zpět v jednom řádku s responzivitou */
+        .search-bar {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: .5rem;
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 8px;
-            padding: 0.5rem;
+            padding: .5rem;
         }
 
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 0.75rem;
+        .search-input {
+            width: 100%;
+            padding: .75rem;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.6); /* Poloprůhledné bílé ohraničení */
+            border: 1px solid rgba(255,255,255,.6);
             font-size: 1rem;
-            background: rgba(255, 255, 255, 0.2); /* Průhledné bílé pozadí uvnitř pole */
-            color: white; /* Bílý text */
-            caret-color: white; /* Bílý indikátor psaní */
-        }
-
-        input[type="text"]::placeholder {
-            color: rgba(255, 255, 255, 0.6); /* Průhledná bílá barva placeholeru (nápovědy) */
-        }
-
-        button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            background: #007bff;
+            background: rgba(255,255,255,.2);
             color: #fff;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
+            caret-color: #fff;
         }
+        .search-input::placeholder { color: rgba(255,255,255,.6); }
 
-        button:hover {
-            background: #0056b3;
-        }
-
-        h2 {
-            text-align: center;
-            font-weight: 400;
-            color: white; /* Bílá barva podnadpisu */
-            margin-top: 1.5rem;
-        }
-
-        .business-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 2rem;
-        }
-
-        .business-item {
-            background: rgba(255, 255, 255, 0.8); /* Poloprůhledné bílé pozadí pro karty */
+        .btn-primary { padding: .75rem 1.2rem; }
+        .btn-back {
+            padding: .75rem 1.2rem;
+            border: 2px solid #fff;
+            color: #fff;
+            background: transparent;
             border-radius: 8px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
+            transition: background-color .3s ease, color .3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: rgba(255,255,255,.2); color:#eee; }
+
+        h2 { text-align: center; font-weight: 400; color: #fff; margin-top: 1.2rem; }
+
+        .business-list { list-style: none; padding: 0; margin-top: 1rem; }
+        .business-item {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 8px;
+            padding: 1.1rem;
+            margin-bottom: 0.9rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease, box-shadow 0.3s ease-in-out;
         }
+        .business-item:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .business-item a { text-decoration: none; font-size: 1.2rem; font-weight: 500; color: #007bff; }
+        .business-item a:hover { color: #0056b3; }
 
-        .business-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
+        .empty-message { text-align: center; margin-top: 1rem; font-size: 1.05rem; color: #fff; }
 
-        .business-item a {
-            text-decoration: none;
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #007bff;
-        }
-
-        .business-item a:hover {
-            color: #0056b3;
-        }
-
-        .empty-message {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 1.1rem;
-            font-weight: 400;
-            color: white; /* Bílá barva pro zprávu o prázdnosti */
+        /* Responzivita */
+        @media (max-width: 575.98px){
+            .search-module { padding: 1.25rem; }
+            h1 { font-size: 1.9rem; margin-bottom: 1.1rem; }
+            .search-bar { grid-template-columns: 1fr; }
+            .btn-primary, .btn-back { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -136,9 +108,13 @@
     <div class="search-module">
         <div class="search-content">
             <h1>Vyhledávání podniků</h1>
+
             <form method="GET" action="{% url 'business_search' %}">
-                <input type="text" name="q" placeholder="Hledat..." value="{{ query }}" aria-label="Hledat podniky">
-                <button type="submit">Hledat</button>
+                <div class="search-bar">
+                    <input type="text" name="q" class="search-input" placeholder="Hledat..." value="{{ query }}" aria-label="Hledat podniky">
+                    <button type="submit" class="btn btn-primary">Hledat</button>
+                    <a href="{% url 'home' %}" class="btn-back">Zpět</a>
+                </div>
             </form>
 
             {% if query %}
@@ -161,7 +137,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

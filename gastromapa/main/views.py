@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -72,7 +73,10 @@ def add_business(request):
     if request.method == 'POST':
         form = BusinessForm(request.POST)
         if form.is_valid():
-            form.save()
+            business = form.save(commit=False)
+            business.owner = request.user  # důležité: nastavíme vlastníka
+            business.save()
+            form.save_m2m()
             messages.success(request, "Podnik byl úspěšně přidán.")
             return redirect('business_list')
         else:
@@ -80,6 +84,17 @@ def add_business(request):
     else:
         form = BusinessForm()
     return render(request, 'add_business.html', {'form': form})
+
+
+@user_passes_test(lambda user: user.is_staff)
+@require_POST
+def business_delete(request, id):
+    """Smazání podniku (pouze admin, POST)."""
+    business = get_object_or_404(Business, id=id)
+    category_id = business.category_id
+    business.delete()
+    messages.success(request, "Podnik byl smazán.")
+    return redirect('category_detail', category_id=category_id)
 
 
 def category_list(request):

@@ -1,66 +1,55 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail podniku - {{ business.name }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-image: url("{% static 'images/pexels-kampus-8629096.jpg' %}");
+            background-image: url("{% static 'images/pexels-enginakyurt-2260555.jpg' %}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             padding-top: 2rem;
         }
 
-        h1, h2 {
-            color: #343a40;
-            font-weight: 500;
-        }
+        h1, h2 { color: #343a40; font-weight: 500; }
 
         .business-details, .reviews-section, .media-gallery {
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 2rem;
             margin-bottom: 2rem;
         }
 
         .business-details p, .reviews-section p, .media-gallery p {
-            margin: 0.5rem 0;
-            font-size: 1.1rem;
+            margin: 0.5rem 0; font-size: 1.05rem;
         }
 
-        .review-item {
-            border-bottom: 1px solid #eaeaea;
-            padding: 1rem 0;
-        }
+        .review-item { border-bottom: 1px solid #eaeaea; padding: 1rem 0; }
 
-        .media-item img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
+        .media-item img { max-width: 100%; border-radius: 10px; margin-bottom: 1rem; }
 
-        .btn-primary {
-            background-color: #007bff;
-            font-size: 1rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-        }
+        .btn-primary { background-color: #007bff; }
+        .btn-primary:hover { background-color: #0056b3; }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
+        .top-actions{ display:flex; gap:.75rem; flex-wrap:wrap; }
+        .back-link{
+            display:inline-block; text-decoration:none; color:#343a40; border:2px solid #343a40;
+            padding:.5rem 1rem; border-radius:8px; transition:background-color .2s ease,color .2s ease;
         }
+        .back-link:hover{ background-color:rgba(52,58,64,.1); color:#000; }
 
-        .text-secondary {
-            font-size: 1.1rem;
-            color: #6c757d !important;
+        @media (max-width: 767.98px) {
+            .business-details, .reviews-section, .media-gallery { padding: 1.25rem; margin-bottom: 1.25rem; }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.25rem; }
+            .top-actions{ justify-content:flex-start; }
         }
     </style>
 </head>
@@ -68,9 +57,17 @@
 <body>
     <div class="container">
         <div class="business-details">
-            <h1>{{ business.name }}</h1>
-            <p><strong>Adresa:</strong> {{ business.address }}</p>
-            <p><strong>Kategorie:</strong> {{ business.category.name }}</p>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-2">
+                <div>
+                    <h1 class="mb-2">{{ business.name }}</h1>
+                    <p><strong>Adresa:</strong> {{ business.address }}</p>
+                    <p class="mb-0"><strong>Kategorie:</strong> {{ business.category.name }}</p>
+                </div>
+
+                <div class="top-actions">
+                    <a href="{% url 'category_detail' business.category.id %}" class="back-link">Zpět na kategorii</a>
+                </div>
+            </div>
         </div>
 
         <div class="reviews-section">
@@ -100,7 +97,7 @@
             {% if media_items %}
             <div class="row">
                 {% for media in media_items %}
-                <div class="col-md-4 mb-3 media-item">
+                <div class="col-12 col-sm-6 col-md-4 mb-3 media-item">
                     <img src="{{ media.file.url }}" alt="Media obrázek">
                 </div>
                 {% endfor %}

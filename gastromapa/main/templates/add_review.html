@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Přidat recenzi - {{ business.name }}</title>
@@ -10,40 +11,32 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-image: url('/static/images/pexels-elevate-1267696.jpg');
+            background-image: url("{% static 'images/pexels-elevate-1267696.jpg' %}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            padding-top: 2rem;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2rem;
-            color: #343a40;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: inline-block;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
+            padding: 2rem 1rem;
         }
 
         .form-container {
-            max-width: 600px;
+            max-width: 640px;
             margin: auto;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.25rem 1.25rem 1rem 1.25rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
         }
 
-        label {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+        .form-title {
+            font-size: 1.35rem;
+            color: #343a40;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
         }
 
+        label { font-weight: 500; margin-bottom: 0.5rem; }
         input, textarea, select {
             width: 100%;
             padding: 0.75rem;
@@ -54,34 +47,64 @@
             background-color: #fafafa;
         }
 
-        button {
-            background-color: #007bff;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: 500;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: .5rem;
+            margin-top: .25rem;
+            flex-wrap: wrap;
         }
+        .btn-primary { background-color: #007bff; border-color: #007bff; }
+        .btn-primary:hover { background-color: #0056b3; border-color: #0056b3; }
+        .btn-danger { background-color: #dc3545; border-color: #dc3545; }
+        .btn-danger:hover { background-color: #bb2d3b; border-color: #bb2d3b; }
 
-        button:hover {
-            background-color: #0056b3;
+        @media (max-width: 575.98px){
+            .form-container { padding: 1rem; }
+            .form-title { font-size: 1.2rem; }
+            .actions { justify-content: space-between; }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Přidat recenzi: {{ business.name }}</h1>
-        <div class="form-container">
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary w-100">Odeslat</button>
-            </form>
-        </div>
+    <div class="form-container">
+        <div class="form-title">Přidat recenzi: {{ business.name }}</div>
+
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="actions">
+                <a href="{% url 'business_detail' business.id %}" class="btn btn-danger">Zrušit</a>
+                <button type="submit" class="btn btn-primary">Odeslat</button>
+            </div>
+        </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const numberInputs = document.querySelectorAll('input[type="number"]');
+            numberInputs.forEach(inp => {
+                // pokud nemá min, nastavíme min=0
+                if (!inp.hasAttribute('min')) {
+                    inp.setAttribute('min', '0');
+                }
+                inp.addEventListener('input', () => {
+                    const min = parseFloat(inp.getAttribute('min') || '0');
+                    if (inp.value !== '' && parseFloat(inp.value) < min) {
+                        inp.value = min;
+                    }
+                });
+                inp.addEventListener('blur', () => {
+                    const min = parseFloat(inp.getAttribute('min') || '0');
+                    if (inp.value !== '' && parseFloat(inp.value) < min) {
+                        inp.value = min;
+                    }
+                });
+            });
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

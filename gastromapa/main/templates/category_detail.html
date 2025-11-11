@@ -24,7 +24,7 @@
                 {% elif category.name == "Bar" %}
                 "{% static 'images/pexels-rachel-claire-5531479.jpg' %}"
                 {% else %}
-                "{% static 'images/pexels-chevanon-302894.jpg' %}"
+                "{% static 'images/pexels-marta-dzedyshko-1042863-2067628.jpg' %}"
                 {% endif %}
             ) no-repeat center center fixed;
             background-size: cover;
@@ -36,6 +36,7 @@
             font-size: 2.5rem;
             color: white;
             margin-top: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.7);
         }
 
         .content {
@@ -48,54 +49,41 @@
             max-width: none;
         }
 
+        .card-link { text-decoration: none; color: inherit; display:block; }
+
         .category-card {
             background: rgba(255, 255, 255, 0.8);
             border-radius: 12px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
         }
 
-        .category-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-        }
+        .category-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
 
-        .category-card a {
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #007bff;
-        }
+        .category-card h3 { font-size: 1.2rem; font-weight: 500; color: #007bff; margin: 0; }
+        .category-card p { margin-top: 0.5rem; color: #343a40; }
 
-        .category-card a:hover {
-            color: #0056b3;
-        }
-
-        .category-card p {
-            margin-top: 0.5rem;
-            color: #343a40;
-        }
-
-        .back-link {
+        .link-btn {
             display: inline-block;
-            margin-top: 2rem;
             font-size: 1rem;
             text-decoration: none;
-            color: white;
             padding: 0.8rem 1.5rem;
-            border: 2px solid white;
             border-radius: 8px;
             transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0 .5rem;
         }
+        .link-back { color: white; border: 2px solid white; }
+        .link-back:hover { background-color: rgba(255,255,255,0.2); color:#ddd; }
 
-        .back-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #ddd;
-        }
 
-        .back-link-container {
-            text-align: center;
-            margin-top: 2rem;
+        @media (max-width: 767.98px) {
+            h1 { font-size: 2rem; margin-top: 1.2rem; }
+            .content { margin: 2rem 0; padding: 1.25rem; }
+            .category-card { padding: 1rem; }
+            .category-card h3 { font-size: 1.05rem; }
+            .category-card p { font-size: .95rem; }
         }
     </style>
 </head>
@@ -108,18 +96,21 @@
             <div class="row justify-content-center">
                 {% for business in businesses %}
                 <div class="col-md-4 mb-4">
-                    <div class="category-card">
-                        <a href="{% url 'business_detail' business.id %}">{{ business.name }}</a>
-                        <p>{{ business.description }}</p>
-                    </div>
+                    <a class="card-link" href="{% url 'business_detail' business.id %}">
+                        <div class="category-card">
+                            <h3>{{ business.name }}</h3>
+                            <p>{{ business.description }}</p>
+                        </div>
+                    </a>
                 </div>
                 {% endfor %}
             </div>
             {% else %}
             <p>Žádné podniky v této kategorii.</p>
             {% endif %}
+
             <div class="back-link-container">
-                <a href="{% url 'category_list' %}" class="back-link">Zpět na seznam kategorií</a>
+                <a href="{% url 'category_list' %}" class="link-btn link-back">Zpět</a>
             </div>
         </div>
     </div>
