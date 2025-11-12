@@ -13,6 +13,8 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://petrs.pythonanywhere.com']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
