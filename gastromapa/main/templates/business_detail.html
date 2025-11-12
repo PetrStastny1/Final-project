@@ -102,8 +102,9 @@
             {% if media_items %}
             <div class="row">
                 {% for media in media_items %}
+                {% with media_url=media.file.url|lower %}
                 <div class="col-12 col-sm-6 col-md-4 mb-3 media-item text-center">
-                    {% if media.file.url|lower|endswith:".mp4" or media.file.url|lower|endswith:".mov" or media.file.url|lower|endswith:".webm" %}
+                    {% if ".mp4" in media_url or ".mov" in media_url or ".webm" in media_url %}
                         <video controls width="100%">
                             <source src="{{ media.file.url }}" type="video/mp4">
                         </video>
@@ -111,6 +112,7 @@
                         <img src="{{ media.file.url }}" alt="Media obrázek" class="img-fluid rounded">
                     {% endif %}
                 </div>
+                {% endwith %}
                 {% endfor %}
             </div>
             {% else %}
