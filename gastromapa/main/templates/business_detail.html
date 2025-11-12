@@ -33,7 +33,12 @@
 
         .review-item { border-bottom: 1px solid #eaeaea; padding: 1rem 0; }
 
-        .media-item img { max-width: 100%; border-radius: 10px; margin-bottom: 1rem; }
+        .media-item img, .media-item video {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
 
         .btn-primary { background-color: #007bff; }
         .btn-primary:hover { background-color: #0056b3; }
@@ -97,8 +102,14 @@
             {% if media_items %}
             <div class="row">
                 {% for media in media_items %}
-                <div class="col-12 col-sm-6 col-md-4 mb-3 media-item">
-                    <img src="{{ media.file.url }}" alt="Media obrázek">
+                <div class="col-12 col-sm-6 col-md-4 mb-3 media-item text-center">
+                    {% if media.file.url|lower|endswith:".mp4" or media.file.url|lower|endswith:".mov" or media.file.url|lower|endswith:".webm" %}
+                        <video controls width="100%">
+                            <source src="{{ media.file.url }}" type="video/mp4">
+                        </video>
+                    {% else %}
+                        <img src="{{ media.file.url }}" alt="Media obrázek" class="img-fluid rounded">
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
@@ -110,5 +121,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
