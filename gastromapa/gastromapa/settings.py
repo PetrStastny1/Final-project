@@ -14,6 +14,9 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://petrs.pythonanywhere.com']
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
